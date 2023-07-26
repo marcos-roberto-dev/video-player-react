@@ -1,7 +1,6 @@
-import ReactPlayer from 'react-player'
-
-import { ClassItem } from '../components/ClassItem'
+import { Module } from '../components/Module'
 import { Header } from '../components/Header'
+import { Video } from '../components/Video'
 
 export function Player() {
   return (
@@ -10,17 +9,12 @@ export function Player() {
         <Header />
         <main className="relative pr-80  flex overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow">
           <div className="flex-1">
-            <div className="w-full bg-zinc-950 aspect-video">
-              <ReactPlayer
-                width="100%"
-                height="100%"
-                controls
-                url="https://www.youtube.com/watch?v=u99tNt3TZf8&"
-              />
-            </div>
+            <Video />
           </div>
-          <aside className="w-80 overflow-y-auto scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800 absolute top-0 bottom-0 right-0 border-l border-zinc-800 bg-zinc-900">
-            <ClassItem />
+          <aside className="w-80 divide-y-2 divide-zinc-900 overflow-y-auto scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800 absolute top-0 bottom-0 right-0 border-l border-zinc-800 bg-zinc-900">
+            <Module />
+            <Module />
+            <Module />
           </aside>
         </main>
       </div>

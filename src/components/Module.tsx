@@ -1,6 +1,7 @@
-import { ChevronDown, Video } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
+import { Lesson } from './Lesson'
 
-export function ClassItem() {
+export function Module() {
   return (
     <div>
       <button className="flex w-full items-center gap-3 bg-zinc-800 p-4">
@@ -16,11 +17,10 @@ export function ClassItem() {
       </button>
 
       <nav className="relative flex flex-col gap-4 p-6">
-        <button className="flex items-center gap-3 text-sm text-zinc-400">
-          <Video className="w-4 h-4 text-zinc-500" />
-          <span>Fundamentos do Redux</span>
-          <span className="ml-auto font-mono text-xs text-zinc-500">09:13</span>
-        </button>
+        <Lesson />
+        <Lesson />
+        <Lesson />
+        <Lesson />
       </nav>
     </div>
   )
