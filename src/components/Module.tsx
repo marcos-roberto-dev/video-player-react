@@ -28,9 +28,12 @@ export function Module({ amountOfLessons, title, moduleIndex }: ModuleProps) {
   })
   const dispatch = useDispatch()
   return (
-    <Collapsible.Root className="group">
+    <Collapsible.Root className="group" defaultOpen={moduleIndex === 0}>
       <Collapsible.Trigger className="flex w-full items-center gap-3 bg-zinc-800 hover:bg-zinc-700  p-4">
-        <div className="flex h-10 w-10 rounded-full items-center justify-center bg-zinc-900 text-xs">
+        <div
+          data-active={moduleIndex === currentModuleIndex}
+          className="flex h-10 w-10 rounded-full items-center justify-center bg-zinc-900 text-xs border data-[active=true]:border-emerald-400"
+        >
           {moduleIndex + 1}
         </div>
         <div className="flex flex-col gap-1 text-left">

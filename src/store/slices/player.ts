@@ -66,8 +66,26 @@ const PlayerSlice = createSlice({
       state.currentModuleIndex = moduleIndex
       state.currentLessonIndex = lessonIndex
     },
+    next: (state) => {
+      const nextLessonIndex = state.currentLessonIndex + 1
+      const nextLesson =
+        state.course.modules[state.currentModuleIndex].lessons[nextLessonIndex]
+
+      if (nextLesson) {
+        state.currentLessonIndex = nextLessonIndex
+        return
+      }
+
+      const nextModelIndex = state.currentModuleIndex + 1
+      const nextModule = state.course.modules[nextModelIndex]
+
+      if (nextModule) {
+        state.currentModuleIndex = nextModelIndex
+        state.currentLessonIndex = 0
+      }
+    },
   },
 })
 
 export const player = PlayerSlice.reducer
-export const { play } = PlayerSlice.actions
+export const { play, next } = PlayerSlice.actions
