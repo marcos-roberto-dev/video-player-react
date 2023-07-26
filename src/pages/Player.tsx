@@ -1,14 +1,14 @@
-import ReactPlayer from "react-player";
+import ReactPlayer from 'react-player'
 
-import { ClassItem } from "../components/ClassItem";
-import { Header } from "../components/Header";
+import { ClassItem } from '../components/ClassItem'
+import { Header } from '../components/Header'
 
 export function Player() {
   return (
-    <div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center">
+    <div className="h-screen bg-zinc-950 text-zinc-50 flex justify-center items-center ">
       <div className="flex w-[1100px] flex-col gap-6">
         <Header />
-        <main className="relative flex overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow">
+        <main className="relative pr-80  flex overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow">
           <div className="flex-1">
             <div className="w-full bg-zinc-950 aspect-video">
               <ReactPlayer
@@ -19,11 +19,11 @@ export function Player() {
               />
             </div>
           </div>
-          <aside className="w-80 border-l border-zinc-800 bg-zinc-900">
+          <aside className="w-80 overflow-y-auto scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800 absolute top-0 bottom-0 right-0 border-l border-zinc-800 bg-zinc-900">
             <ClassItem />
           </aside>
         </main>
       </div>
     </div>
-  );
+  )
 }

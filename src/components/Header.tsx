@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { MessageCircle } from 'lucide-react'
 
 export function Header() {
   return (
@@ -14,5 +14,5 @@ export function Header() {
         Deixar feedback
       </button>
     </header>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { ChevronDown, Video } from "lucide-react";
+import { ChevronDown, Video } from 'lucide-react'
 
 export function ClassItem() {
   return (
@@ -23,5 +23,5 @@ export function ClassItem() {
         </button>
       </nav>
     </div>
-  );
+  )
 }
