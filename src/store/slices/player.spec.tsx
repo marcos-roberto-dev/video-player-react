@@ -1,16 +1,23 @@
 import { describe, it, expect } from 'vitest'
-import { next, play, player as reducer, useCurrentLesson } from './player'
+import {
+  PlayerState,
+  next,
+  play,
+  player as reducer,
+  useCurrentLesson,
+} from './player'
 import { renderHook } from '@testing-library/react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { configureStore, createSlice } from '@reduxjs/toolkit'
 
-const exampleState = {
+const exampleState: PlayerState = {
   currentModuleIndex: 0,
   currentLessonIndex: 0,
   course: {
+    id: 1,
     modules: [
       {
-        id: '1',
+        id: 1,
         title: 'Iniciando com React',
         lessons: [
           { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
@@ -22,7 +29,7 @@ const exampleState = {
         ],
       },
       {
-        id: '2',
+        id: 2,
         title: 'Estrutura da aplicação',
         lessons: [
           {
@@ -38,6 +45,34 @@ const exampleState = {
 }
 
 describe('player slice', () => {
+  it('should be start course', () => {
+    const exampleState: PlayerState = {
+      currentModuleIndex: 0,
+      currentLessonIndex: 0,
+      course: null,
+    }
+    const course = {
+      id: 1,
+      modules: [
+        {
+          id: 1,
+          title: 'Iniciando com React',
+          lessons: [
+            { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
+            {
+              id: 'w-DW4DhDfcw',
+              title: 'Estilização do Post',
+              duration: '10:05',
+            },
+          ],
+        },
+      ],
+    }
+    const state = reducer(exampleState, start(course))
+
+    expect(state.course).toEqual(course)
+  })
+
   it('should be able to play', () => {
     const state = reducer(exampleState, play([1, 2]))
 
@@ -86,9 +121,9 @@ describe('player slice', () => {
       ),
     })
 
-    expect(result.current.module).toEqual(exampleState.course.modules[0])
+    expect(result.current.module).toEqual(exampleState.course?.modules[0])
     expect(result.current.lesson).toEqual(
-      exampleState.course.modules[0].lessons[0],
+      exampleState.course?.modules[0].lessons[0],
     )
   })
 })
