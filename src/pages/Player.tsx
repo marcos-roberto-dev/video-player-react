@@ -12,9 +12,21 @@ export function Player() {
             <Video />
           </div>
           <aside className="w-80 divide-y-2 divide-zinc-900 overflow-y-auto scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800 absolute top-0 bottom-0 right-0 border-l border-zinc-800 bg-zinc-900">
-            <Module />
-            <Module />
-            <Module />
+            <Module
+              moduleIndex={0}
+              amountOfLessons={4}
+              title="Desvendando o Redux"
+            />
+            <Module
+              moduleIndex={1}
+              amountOfLessons={4}
+              title="Desvendando o Redux"
+            />
+            <Module
+              moduleIndex={2}
+              amountOfLessons={4}
+              title="Desvendando o Redux"
+            />
           </aside>
         </main>
       </div>
