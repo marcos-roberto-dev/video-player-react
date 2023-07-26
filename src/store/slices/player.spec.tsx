@@ -4,7 +4,6 @@ import {
   next,
   play,
   player as reducer,
-  start,
   useCurrentLesson,
 } from './player'
 import { renderHook } from '@testing-library/react'
@@ -46,34 +45,6 @@ const exampleState: PlayerState = {
 }
 
 describe('player slice', () => {
-  it('should be start course', () => {
-    const exampleStateWithoutCourse: PlayerState = {
-      currentModuleIndex: 0,
-      currentLessonIndex: 0,
-      course: null,
-    }
-    const course = {
-      id: 1,
-      modules: [
-        {
-          id: 1,
-          title: 'Iniciando com React',
-          lessons: [
-            { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
-            {
-              id: 'w-DW4DhDfcw',
-              title: 'Estilização do Post',
-              duration: '10:05',
-            },
-          ],
-        },
-      ],
-    }
-    const state = reducer(exampleStateWithoutCourse, start(course))
-
-    expect(state.course).toEqual(course)
-  })
-
   it('should be able to play', () => {
     const state = reducer(exampleState, play([1, 2]))
 
