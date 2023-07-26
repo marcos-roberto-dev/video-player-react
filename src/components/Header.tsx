@@ -1,16 +1,8 @@
 import { MessageCircle } from 'lucide-react'
-import { useAppSelector } from '../store'
+import { useCurrentLesson } from '../store/slices/player'
 
 export function Header() {
-  const { module, lesson } = useAppSelector((state) => {
-    const { currentModuleIndex, currentLessonIndex } = state.player
-    const module = state.player.course.modules[currentModuleIndex]
-    const lesson =
-      state.player.course.modules[currentModuleIndex].lessons[
-        currentLessonIndex
-      ]
-    return { module, lesson }
-  })
+  const { module, lesson } = useCurrentLesson()
   return (
     <header className="flex items-center justify-between">
       <div className="flex flex-col gap-1">
