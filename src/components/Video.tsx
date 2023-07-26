@@ -16,7 +16,7 @@ export function Video() {
         height="100%"
         controls
         playing
-        url={`https://www.youtube.com/watch?v=${lesson.id}`}
+        url={`https://www.youtube.com/watch?v=${lesson?.id}`}
         onEnded={handlePlayNext}
       />
     </div>
