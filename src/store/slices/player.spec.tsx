@@ -11,6 +11,7 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { configureStore, createSlice } from '@reduxjs/toolkit'
 
 const exampleState: PlayerState = {
+  isLoading: false,
   currentModuleIndex: 0,
   currentLessonIndex: 0,
   course: {

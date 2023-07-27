@@ -1,8 +1,15 @@
 import { MessageCircle } from 'lucide-react'
 import { useCurrentLesson } from '../store/slices/player'
+import { useAppSelector } from '../store'
 
 export function Header() {
   const { module, lesson } = useCurrentLesson()
+  const isCourseLoading = useAppSelector((state) => state.player.isLoading)
+
+  if (isCourseLoading) {
+    return <h1 className="text-2xl font-bold">Carregando...</h1>
+  }
+
   return (
     <header className="flex items-center justify-between">
       <div className="flex flex-col gap-1">
