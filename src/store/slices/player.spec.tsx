@@ -1,102 +1,148 @@
-import { describe, it, expect } from 'vitest'
-import {
-  PlayerState,
-  next,
-  play,
-  player as reducer,
-  useCurrentLesson,
-} from './player'
-import { renderHook } from '@testing-library/react'
-import { Provider as ReduxProvider } from 'react-redux'
-import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { describe, it, expect, beforeEach } from 'vitest'
+import { useStore as store, useCurrentLesson } from './player'
+import { act, renderHook } from '@testing-library/react'
+import { api } from '../../lib/axios'
+import MockAdapter from 'axios-mock-adapter'
+// const exampleState: PlayerState = {
+//   isLoading: false,
+//   currentModuleIndex: 0,
+//   currentLessonIndex: 0,
+//   course: {
+//     id: 1,
+//     modules: [
+//       {
+//         id: 1,
+//         title: 'Iniciando com React',
+//         lessons: [
+//           { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
+//           {
+//             id: 'w-DW4DhDfcw',
+//             title: 'Estilização do Post',
+//             duration: '10:05',
+//           },
+//         ],
+//       },
+//       {
+//         id: 2,
+//         title: 'Estrutura da aplicação',
+//         lessons: [
+//           {
+//             id: 'gE48FQXRZ_o',
+//             title: 'Componente: Comment',
+//             duration: '13:45',
+//           },
+//           { id: 'Ng_Vk4tBl0g', title: 'Responsividade', duration: '10:05' },
+//         ],
+//       },
+//     ],
+//   },
+// }
 
-const exampleState: PlayerState = {
-  isLoading: false,
-  currentModuleIndex: 0,
-  currentLessonIndex: 0,
-  course: {
-    id: 1,
-    modules: [
-      {
-        id: 1,
-        title: 'Iniciando com React',
-        lessons: [
-          { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
-          {
-            id: 'w-DW4DhDfcw',
-            title: 'Estilização do Post',
-            duration: '10:05',
-          },
-        ],
-      },
-      {
-        id: 2,
-        title: 'Estrutura da aplicação',
-        lessons: [
-          {
-            id: 'gE48FQXRZ_o',
-            title: 'Componente: Comment',
-            duration: '13:45',
-          },
-          { id: 'Ng_Vk4tBl0g', title: 'Responsividade', duration: '10:05' },
-        ],
-      },
-    ],
-  },
+const course = {
+  id: 1,
+  modules: [
+    {
+      id: 1,
+      title: 'Iniciando com React',
+      lessons: [
+        { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
+        {
+          id: 'w-DW4DhDfcw',
+          title: 'Estilização do Post',
+          duration: '10:05',
+        },
+      ],
+    },
+    {
+      id: 2,
+      title: 'Estrutura da aplicação',
+      lessons: [
+        {
+          id: 'gE48FQXRZ_o',
+          title: 'Componente: Comment',
+          duration: '13:45',
+        },
+        { id: 'Ng_Vk4tBl0g', title: 'Responsividade', duration: '10:05' },
+      ],
+    },
+  ],
 }
 
+const mockAxios = new MockAdapter(api)
+const initialState = store.getState()
 describe('player slice', () => {
-  it('should be able to play', () => {
-    const state = reducer(exampleState, play([1, 2]))
+  beforeEach(() => {
+    store.setState(initialState)
+  })
 
-    expect(state.currentModuleIndex).toBe(1)
-    expect(state.currentLessonIndex).toBe(2)
+  it('should be able to play', () => {
+    const { play } = store.getState()
+    play([1, 2])
+
+    const { currentModuleIndex, currentLessonIndex } = store.getState()
+
+    expect(currentModuleIndex).toBe(1)
+    expect(currentLessonIndex).toBe(2)
   })
 
   it('should be able to play next video automatically', () => {
-    const state = reducer(exampleState, next())
+    store.setState({ course })
+    const { next } = store.getState()
 
-    expect(state.currentModuleIndex).toBe(0)
-    expect(state.currentLessonIndex).toBe(1)
+    next()
+
+    const { currentModuleIndex, currentLessonIndex } = store.getState()
+
+    expect(currentModuleIndex).toBe(0)
+    expect(currentLessonIndex).toBe(1)
   })
 
   it('should be able to jump to the next module automatically', () => {
-    const state = reducer({ ...exampleState, currentLessonIndex: 1 }, next())
-
-    expect(state.currentModuleIndex).toBe(1)
-    expect(state.currentLessonIndex).toBe(0)
+    store.setState({ course, currentLessonIndex: 1 })
+    const { next } = store.getState()
+    next()
+    const { currentModuleIndex, currentLessonIndex } = store.getState()
+    expect(currentModuleIndex).toBe(1)
+    expect(currentLessonIndex).toBe(0)
   })
 
   it('should not update the current module and lesson index if there is no next lesson available', () => {
-    const state = reducer(
-      { ...exampleState, currentLessonIndex: 1, currentModuleIndex: 1 },
-      next(),
-    )
-
-    expect(state.currentModuleIndex).toBe(1)
-    expect(state.currentLessonIndex).toBe(1)
+    store.setState({ course, currentLessonIndex: 1, currentModuleIndex: 1 })
+    const { next } = store.getState()
+    next()
+    const { currentModuleIndex, currentLessonIndex } = store.getState()
+    expect(currentModuleIndex).toBe(1)
+    expect(currentLessonIndex).toBe(1)
   })
 
-  it('should be current module and lesson', () => {
-    const store = configureStore({
-      reducer: {
-        player: createSlice({
-          name: 'player',
-          initialState: exampleState,
-          reducers: {},
-        }).reducer,
-      },
+  it('should be current module and lesson', async () => {
+    const mockCourseResponse = {
+      id: 1,
+      modules: [
+        {
+          id: 1,
+          title: 'Iniciando com React',
+          lessons: [
+            { id: 'Jai8w6K_GnY', title: 'CSS Modules', duration: '13:45' },
+            {
+              id: 'w-DW4DhDfcw',
+              title: 'Estilização do Post',
+              duration: '10:05',
+            },
+          ],
+        },
+      ],
+    }
+    const { load } = store.getState()
+    mockAxios.onGet('/courses/1').reply(200, mockCourseResponse)
+    await act(async () => {
+      await load()
     })
+    const { result } = renderHook(() => useCurrentLesson())
 
-    const { result } = renderHook(() => useCurrentLesson(), {
-      wrapper: ({ children }) => (
-        <ReduxProvider store={store}>{children}</ReduxProvider>
-      ),
-    })
-
-    expect(result.current.module).toEqual(exampleState.course?.modules[0])
+    expect(result.current.module).toEqual(mockCourseResponse.modules[0])
     expect(result.current.lesson).toEqual(
-      exampleState.course?.modules[0].lessons[0],
+      mockCourseResponse.modules[0].lessons[0],
     )
   })
 })

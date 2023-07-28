@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { Module } from '../components/Module'
 import { Header } from '../components/Header'
 import { Video } from '../components/Video'
-import { useStore } from '../zustand-store'
+import { useStore } from '../store/slices/player'
 
 export function Player() {
   const { course, load } = useStore((store) => {
